@@ -49,8 +49,7 @@ export async function POST(req: Request) {
 
   const proximity = calculateProximity(
     guessedCountry,
-    targetCountry,
-    allCountries
+    targetCountry
   );
 
   return NextResponse.json({
