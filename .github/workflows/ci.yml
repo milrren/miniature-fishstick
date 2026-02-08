@@ -10,6 +10,8 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
+      - name: Enable pnpm via Corepack
+        run: corepack enable && corepack prepare pnpm@latest --activate
       - name: Install deps
         run: pnpm install
       - name: Run tests
