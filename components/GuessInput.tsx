@@ -42,7 +42,7 @@ export default function GuessInput({ onGuess, disabled }: Props) {
 
   return (
     <form
-      className="w-full flex gap-2 items-center"
+      className="w-full flex flex-col sm:flex-row gap-2 items-stretch"
       autoComplete="off"
       onSubmit={e => {
         e.preventDefault();
@@ -69,7 +69,7 @@ export default function GuessInput({ onGuess, disabled }: Props) {
         type="submit"
         onClick={submit}
         disabled={disabled || loading}
-        className="btn btn-primary"
+        className="btn btn-primary w-full sm:w-auto"
       >
         Enviar
       </button>
