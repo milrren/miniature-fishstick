@@ -5,28 +5,23 @@ type Props = {
 };
 
 function colorForRank(rank: number) {
-  if (rank === 0) return "green";
-  if (rank <= 5) return "#4caf50";
-  if (rank <= 20) return "#ffc107";
-  if (rank <= 50) return "#ff9800";
-  return "#f44336";
+  if (rank === 0) return "bg-green-600 text-white dark:bg-green-900 dark:text-green-200";
+  if (rank <= 5) return "bg-green-200 text-green-900 dark:bg-green-900 dark:text-green-200";
+  if (rank <= 20) return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+  if (rank <= 50) return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+  return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
 }
 
 export default function GuessHistory({ guesses }: Props) {
   return (
-    <ul style={{ listStyle: "none", padding: 0 }}>
+    <ul className="w-full mt-2 flex flex-col gap-2">
       {guesses.map((g, i) => (
         <li
           key={i}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "6px 0",
-            color: colorForRank(g.rank)
-          }}
+          className={`flex justify-between items-center px-3 py-2 rounded-lg font-mono text-sm shadow-sm ${colorForRank(g.rank)}`}
         >
-          <span>{g.country}</span>
-          <strong>{g.rank}</strong>
+          <span className="truncate font-semibold">{g.country}</span>
+          <strong className="text-base">{g.rank}</strong>
         </li>
       ))}
     </ul>

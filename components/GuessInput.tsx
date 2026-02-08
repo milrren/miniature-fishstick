@@ -41,21 +41,22 @@ export default function GuessInput({ onGuess, disabled }: Props) {
   }
 
   return (
-    <div style={{ display: "flex", gap: 8 }}>
+    <form
+      className="w-full flex gap-2 items-center"
+      autoComplete="off"
+      onSubmit={e => {
+        e.preventDefault();
+        submit();
+      }}
+    >
       <input
         list="countries-list"
         value={value}
         onChange={e => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={
-          loading ? "Carregando países..." : "Digite um país"
-        }
+        placeholder={loading ? "Carregando países..." : "Digite um país"}
         disabled={disabled || loading}
-        style={{
-          padding: 8,
-          flex: 1,
-          fontSize: 16
-        }}
+        className="flex-1 input"
       />
 
       <datalist id="countries-list">
@@ -64,9 +65,14 @@ export default function GuessInput({ onGuess, disabled }: Props) {
         ))}
       </datalist>
 
-      <button onClick={submit} disabled={disabled || loading}>
+      <button
+        type="submit"
+        onClick={submit}
+        disabled={disabled || loading}
+        className="btn btn-primary"
+      >
         Enviar
       </button>
-    </div>
+    </form>
   );
 }

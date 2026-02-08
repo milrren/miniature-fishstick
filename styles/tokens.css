@@ -1,0 +1,21 @@
+/* Design tokens: cores, espaçamento, fontes, etc. */
+:root {
+  --color-primary: #2563eb;
+  --color-success: #22c55e;
+  --color-warning: #facc15;
+  --color-danger: #ef4444;
+  --radius-lg: 0.75rem;
+  --radius-md: 0.5rem;
+  --radius-sm: 0.25rem;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #3b82f6;
+    --color-success: #16a34a;
+    --color-warning: #fde68a;
+    --color-danger: #f87171;
+  }
+}
