@@ -3,6 +3,7 @@ import countries from "@/data/countries.json";
 import { Country } from "@/lib/types";
 import { calculateProximity } from "@/lib/proximity";
 import { getCountryOfTheDay } from "@/lib/countryOfTheDay";
+import { normalize } from "@/lib/normalize";
 
 type GuessRequest = {
   guess: string;
@@ -27,13 +28,15 @@ export async function POST(req: Request) {
     );
   }
 
-  const normalizedGuess = body.guess.trim().toLowerCase();
+  const normalizedGuess = normalize(body.guess);
 
   const allCountries = countries as Country[];
 
-  const guessedCountry = allCountries.find(c =>
-    c.name.toLowerCase() === normalizedGuess
-  );
+  const guessedCountry = allCountries.find(country =>
+  country.aliases.some(alias =>
+    normalize(alias) === normalizedGuess
+  )
+);
 
   if (!guessedCountry) {
     return NextResponse.json(

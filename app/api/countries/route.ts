@@ -6,6 +6,6 @@ export async function GET() {
   const allCountries = countries as Country[];
 
   return NextResponse.json(
-    allCountries.map(c => c.name)
+    allCountries.map(c => c.aliases[0])
   );
 }

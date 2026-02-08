@@ -3,4 +3,5 @@ export type Country = {
   name: string;
   continent: string;
   borders: string[];
+  aliases: string[];
 };
