@@ -1,80 +1,50 @@
 import { Country } from "./types";
 
-/* ---------- BFS por fronteiras ---------- */
-function borderDistance(
-  from: Country,
-  to: Country,
-  countriesByCode: Map<string, Country>
-): number {
-  if (from.code === to.code) return 0;
+/* ---------- Distância real (Haversine) ---------- */
+function haversineDistance(a: Country, b: Country): number {
+  const R = 6371; // raio da Terra em km
 
-  const visited = new Set<string>();
-  const queue: Array<{ code: string; dist: number }> = [
-    { code: from.code, dist: 0 }
-  ];
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
 
-  visited.add(from.code);
+  const dLat = toRad(b.latlng[0] - a.latlng[0]);
+  const dLon = toRad(b.latlng[1] - a.latlng[1]);
 
-  while (queue.length > 0) {
-    const { code, dist } = queue.shift()!;
-    const country = countriesByCode.get(code);
-    if (!country) continue;
+  const lat1 = toRad(a.latlng[0]);
+  const lat2 = toRad(b.latlng[0]);
 
-    for (const neighbor of country.borders) {
-      if (neighbor === to.code) {
-        return dist + 1;
-      }
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
 
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor);
-        queue.push({ code: neighbor, dist: dist + 1 });
-      }
-    }
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/* ---------- Bônus por fronteira ---------- */
+function borderBonus(a: Country, b: Country): number {
+  if (a.borders.includes(b.code)) {
+    return 0.7; // 30% mais perto
   }
-
-  // Países sem fronteira terrestre (ilhas)
-  return Infinity;
+  return 1;
 }
 
-/* ---------- Normalização ---------- */
-function normalizeDistance(dist: number): number {
-  if (dist === 0) return 0;
-  if (dist === 1) return 1;
-  if (dist === 2) return 5;
-  if (dist === 3) return 10;
-  if (dist === 4) return 20;
-  if (dist === 5) return 35;
-  if (dist === 6) return 50;
-  return 70;
-}
-
-/* ---------- Penalidade por continente ---------- */
-function continentPenalty(a: Country, b: Country): number {
-  if (a.continent === b.continent) return 0;
-
-  const close = new Set([
-    "Europe-Asia",
-    "Asia-Europe",
-  ]);
-
-  const key = `${a.continent}-${b.continent}`;
-  if (close.has(key)) return 10;
-
-  return 30;
+/* ---------- Bônus por continente ---------- */
+function continentBonus(a: Country, b: Country): number {
+  if (a.continent === b.continent) {
+    return 0.9; // 10% mais perto
+  }
+  return 1;
 }
 
 /* ---------- Função pública ---------- */
 export function calculateProximity(
   guess: Country,
-  target: Country,
-  countries: Country[]
+  target: Country
 ): number {
-  const map = new Map(countries.map(c => [c.code, c]));
+  const distanceKm = haversineDistance(guess, target);
 
-  const borderDist = borderDistance(guess, target, map);
-  let score = normalizeDistance(borderDist);
+  let score = distanceKm;
+  score *= continentBonus(guess, target);
+  score *= borderBonus(guess, target);
 
-  score += continentPenalty(guess, target);
-
-  return Math.min(score, 100);
+  return Math.round(score);
 }

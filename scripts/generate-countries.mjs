@@ -2,7 +2,7 @@ import fs from "fs";
 
 const URL =
   "https://restcountries.com/v3.1/all" +
-  "?fields=name,cca2,borders,continents,translations";
+  "?fields=name,cca2,borders,continents,translations,latlng";
 
 const res = await fetch(URL, {
   headers: {
@@ -33,7 +33,7 @@ function normalizeAlias(text) {
 }
 
 const countries = data
-  .filter(c => c.cca2 && c.name?.common)
+  .filter(c => c.cca2 && c.name?.common && Array.isArray(c.latlng))
   .map(c => {
     const aliases = new Set();
 
@@ -56,7 +56,8 @@ const countries = data
       name: c.name.common,
       aliases: Array.from(aliases),
       continent: c.continents?.[0] ?? "Other",
-      borders: c.borders ?? []
+      borders: c.borders ?? [],
+      latlng: c.latlng ?? [0, 0]
     };
   })
   .sort((a, b) => a.name.localeCompare(b.name));

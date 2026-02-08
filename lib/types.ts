@@ -4,4 +4,5 @@ export type Country = {
   continent: string;
   borders: string[];
   aliases: string[];
+  latlng: [number, number];
 };
