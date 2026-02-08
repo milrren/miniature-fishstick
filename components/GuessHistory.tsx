@@ -13,9 +13,10 @@ function colorForRank(rank: number) {
 }
 
 export default function GuessHistory({ guesses }: Props) {
+  const sortedGuesses = [...guesses].sort((a, b) => a.rank - b.rank);
   return (
     <ul className="w-full mt-2 flex flex-col gap-2">
-      {guesses.map((g, i) => (
+      {sortedGuesses.map((g, i) => (
         <li
           key={i}
           className={`flex justify-between items-center px-3 py-2 rounded-lg font-mono text-sm shadow-sm ${colorForRank(g.rank)}`}
