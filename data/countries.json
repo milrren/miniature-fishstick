@@ -1,0 +1,14 @@
+[
+  {
+    "code": "BR",
+    "name": "Brazil",
+    "continent": "South America",
+    "borders": ["AR", "UY", "PY", "BO", "PE", "CO", "VE", "GY", "SR", "GF"]
+  },
+  {
+    "code": "AR",
+    "name": "Argentina",
+    "continent": "South America",
+    "borders": ["BR", "UY", "PY", "BO", "CL"]
+  }
+]
