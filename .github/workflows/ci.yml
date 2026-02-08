@@ -5,13 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Enable pnpm via Corepack
+        run: corepack enable && corepack prepare pnpm@latest --activate
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Enable pnpm via Corepack
-        run: corepack enable && corepack prepare pnpm@latest --activate
       - name: Install deps
         run: pnpm install
       - name: Run tests
